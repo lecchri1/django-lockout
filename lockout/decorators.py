@@ -3,15 +3,19 @@ Lockout Decorators
 """
 
 ########################################################################
+from __future__ import absolute_import
 
-from django.utils.functional import wraps
 from django.core.cache import cache
-from middleware import thread_namespace
-from exceptions import LockedOut
-from utils import generate_base_key
-import settings
+from django.utils.functional import wraps
+
+from lockout import settings
+from lockout.exceptions import LockedOut
+from lockout.middleware import thread_namespace
+from lockout.utils import generate_base_key
+
 
 ########################################################################
+
 
 def enforce_lockout(function):
     """Wraps the provided ``function`` (django.contrib.auth.authenticate) to

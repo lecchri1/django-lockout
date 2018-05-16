@@ -3,9 +3,12 @@ Lockout Middleware
 """
 
 ########################################################################
+from __future__ import absolute_import
 
 from threading import local
+
 thread_namespace = local()
+
 
 class LockoutMiddleware(object):
     """Decorates django.contrib.auth.authenticate with enforce_lockout, and

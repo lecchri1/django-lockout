@@ -3,17 +3,21 @@ Lockout Tests
 """
 
 ########################################################################
+from __future__ import absolute_import
 
+import time
+
+from django.conf import settings
+from django.contrib import auth
+from django.contrib.auth.models import User
 from django.test import TestCase
 from django.test.client import RequestFactory
-from django.contrib.auth.models import User
-from django.contrib import auth
-from django.conf import settings
-import settings as lockout_settings
-from middleware import LockoutMiddleware
-from exceptions import LockedOut
-from utils import reset_attempts
-import time
+
+from lockout import settings as lockout_settings
+from lockout.exceptions import LockedOut
+from lockout.middleware import LockoutMiddleware
+from lockout.utils import reset_attempts
+
 
 ########################################################################
 

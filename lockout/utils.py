@@ -2,18 +2,22 @@
 Lockout Utils
 """
 ########################################################################
+from __future__ import absolute_import
 
 try:
     from hashlib import md5
 except ImportError:
     from md5 import md5
+
 from django.core.cache import cache
-import settings
+from lockout import settings
 import re
+import six
 
 ########################################################################
 
 WHITESPACE = re.compile('\s')
+
 
 def generate_base_key(*params):
     """Generates a base key to be used for caching, containing the
@@ -21,7 +25,10 @@ def generate_base_key(*params):
     will later be combined with any required version or prefix.
     """    
     raw_key = ";".join(params)
-    digest = md5(raw_key).hexdigest()
+    if type(raw_key) == six.text_type:
+        digest = md5(raw_key.encode('utf-8')).hexdigest()
+    else:
+        digest = md5(raw_key).hexdigest()
     
     # Whitespace is stripped but the hexdigest ensures uniqueness
     key = '%(prefix)s_%(raw_key)s_%(digest)s' % dict(
@@ -32,6 +39,7 @@ def generate_base_key(*params):
     return key
 
 ########################################################################
+
 
 def reset_attempts(request):
     """Clears the cache key for the specified ``request``.
